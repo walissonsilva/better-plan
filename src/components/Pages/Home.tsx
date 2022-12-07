@@ -7,15 +7,23 @@ export const HomePage: React.FC = () => {
   const today = new Date()
   const [dateOnFocus, setDateOnFocus] = useState(today)
 
+  function addDayToDateOnFocus(addition: 1 | -1) {
+    setDateOnFocus(addDays(dateOnFocus, addition))
+  }
+
   return (
     <main className="p-4 lg:p-8">
+      <div className="flex items-center justify-between py-4">
+        <button onClick={() => addDayToDateOnFocus(-1)}>Previous</button>
+        <button onClick={() => addDayToDateOnFocus(1)}>Next</button>
+      </div>
       <section className="flex gap-1 w-full items-end">
         <DragDropContext onDragEnd={() => {}}>
           {Array.from({ length: 5 }).map((_, idx) => (
             <Droppable
               key={addDays(dateOnFocus, idx - 2).getTime()}
               title={format(addDays(dateOnFocus, idx - 2), 'eeee')}
-              isToday={idx - 2 === 0}
+              isToday={isToday(addDays(dateOnFocus, idx - 2))}
               subtitle={format(addDays(dateOnFocus, idx - 2), 'dd/MM/yy')}
               items={[
                 { id: 'task-1', title: 'terminar' },
