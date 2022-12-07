@@ -24,19 +24,31 @@ interface DroppableProps {
     title: string
   }[]
   droppableId: string
+  isToday?: boolean
 }
 
 export function Droppable({
   items,
   droppableId,
   title,
-  subtitle
+  subtitle,
+  isToday
 }: DroppableProps) {
   return (
     <div className="bg-white flex-1">
-      <div className="bg-gray-700 text-white px-1 py-3 text-center rounded-t-lg">
+      <div
+        className={`${
+          isToday
+            ? 'bg-indigo-700 text-white border-[1px] border-indigo-700'
+            : 'border-[1px] border-gray-500 bg-gray-300 text-black'
+        }  px-1 py-3 text-center rounded-t-lg ${isToday && 'pt-4'}`}
+      >
         <h2 className="text-xl font-semibold mb-2">{title}</h2>
-        <h3 className="text-sm text-gray-300">{subtitle}</h3>
+        <h3
+          className={`text-sm ${isToday ? 'text-gray-300' : 'text-gray-600'}`}
+        >
+          {subtitle}
+        </h3>
       </div>
 
       <DroppableDND droppableId={droppableId} isDropDisabled={false}>
