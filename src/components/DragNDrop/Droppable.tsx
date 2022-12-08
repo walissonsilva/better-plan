@@ -41,7 +41,7 @@ export function Droppable({
           isToday
             ? 'bg-indigo-700 text-white border-[1px] border-indigo-700'
             : 'border-[1px] border-gray-500 bg-gray-300 text-black'
-        }  px-1 py-3 text-center rounded-t-lg ${isToday && 'pt-4'}`}
+        }  px-8 py-3 rounded-t-lg ${isToday && 'pt-4'}`}
       >
         <h2 className="text-xl font-semibold mb-2">{title}</h2>
         <h3

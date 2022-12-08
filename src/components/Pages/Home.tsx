@@ -12,76 +12,37 @@ export const HomePage: React.FC = () => {
     setDateOnFocus(addDays(dateOnFocus, addition))
   }
 
+  function renderDayDroppable(date: Date) {
+    return (
+      <Droppable
+        key={date.getTime()}
+        title={format(date, 'eeee')}
+        isToday={isToday(date)}
+        subtitle={format(date, 'dd/MM/yy')}
+        items={[
+          { id: 'task-1', title: 'terminar' },
+          { id: 'task-2', title: 'dormir' }
+        ]}
+        droppableId={String(date.getTime())}
+      />
+    )
+  }
+
   return (
     <main className="p-4 lg:p-8">
       <div className="flex items-center justify-between py-4 mb-4">
         <button onClick={() => addDayToDateOnFocus(-1)}>
-          <MdArrowBackIos />
+          <MdArrowBackIos size={20} />
         </button>
         <button onClick={() => addDayToDateOnFocus(1)}>
-          <MdArrowForwardIos />
+          <MdArrowForwardIos size={20} />
         </button>
       </div>
       <section className="flex gap-1 w-full items-end">
         <DragDropContext onDragEnd={() => {}}>
-          {Array.from({ length: 5 }).map((_, idx) => (
-            <Droppable
-              key={addDays(dateOnFocus, idx - 2).getTime()}
-              title={format(addDays(dateOnFocus, idx - 2), 'eeee')}
-              isToday={isToday(addDays(dateOnFocus, idx - 2))}
-              subtitle={format(addDays(dateOnFocus, idx - 2), 'dd/MM/yy')}
-              items={[
-                { id: 'task-1', title: 'terminar' },
-                { id: 'task-2', title: 'dormir' }
-              ]}
-              droppableId={String(addDays(dateOnFocus, idx - 2).getTime())}
-            />
-          ))}
-          {/* <Droppable
-            title="Monday"
-            subtitle="05/12/2022"
-            items={[
-              { id: 'task-1', title: 'terminar' },
-              { id: 'task-2', title: 'dormir' }
-            ]}
-            droppableId="1"
-          />
-          <Droppable
-            title="Tuesday"
-            subtitle="06/12/2022"
-            items={[
-              { id: 'task-1', title: 'terminar' },
-              { id: 'task-2', title: 'dormir' }
-            ]}
-            droppableId="1"
-          />
-          <Droppable
-            title={format(dateOnFocus, 'eeee')}
-            subtitle={format(dateOnFocus, 'dd/MM/yy')}
-            items={[
-              { id: 'task-1', title: 'terminar' },
-              { id: 'task-2', title: 'dormir' }
-            ]}
-            droppableId="1"
-          />
-          <Droppable
-            title="Thursday"
-            subtitle="08/12/2022"
-            items={[
-              { id: 'task-1', title: 'terminar' },
-              { id: 'task-2', title: 'dormir' }
-            ]}
-            droppableId="1"
-          />
-          <Droppable
-            title="Friday"
-            subtitle="09/12/2022"
-            items={[
-              { id: 'task-1', title: 'terminar' },
-              { id: 'task-2', title: 'dormir' }
-            ]}
-            droppableId="1"
-          /> */}
+          {Array.from({ length: 5 }).map((_, idx) =>
+            renderDayDroppable(addDays(dateOnFocus, idx - 2))
+          )}
         </DragDropContext>
       </section>
     </main>
