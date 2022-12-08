@@ -1,12 +1,16 @@
+import { addDays, format, isToday } from 'date-fns'
 import { useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { format, addDays, isToday } from 'date-fns'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
+import { useTasks } from '../../hooks/useTasks'
+import { getISODate } from '../../utils/dates'
+import { onDragEnd } from '../../utils/dragNdrop'
 import { Droppable } from '../DragNDrop/Droppable'
 
 export const HomePage: React.FC = () => {
   const today = new Date()
   const [dateOnFocus, setDateOnFocus] = useState(today)
+  const { tasks, updateTasks } = useTasks()
 
   function addDayToDateOnFocus(addition: 1 | -1) {
     setDateOnFocus(addDays(dateOnFocus, addition))
@@ -16,14 +20,11 @@ export const HomePage: React.FC = () => {
     return (
       <Droppable
         key={date.getTime()}
-        title={format(date, 'eeee')}
         isToday={isToday(date)}
-        subtitle={format(date, 'dd/MM/yy')}
-        items={[
-          { id: 'task-1', title: 'terminar' },
-          { id: 'task-2', title: 'dormir' }
-        ]}
-        droppableId={String(date.getTime())}
+        dayOfWeek={format(date, 'eeee')}
+        date={date}
+        items={tasks[getISODate(date)] ?? []}
+        droppableId={getISODate(date)}
       />
     )
   }
@@ -38,8 +39,10 @@ export const HomePage: React.FC = () => {
           <MdArrowForwardIos size={20} />
         </button>
       </div>
-      <section className="flex gap-1 w-full items-end">
-        <DragDropContext onDragEnd={() => {}}>
+      <section className="flex gap-1 w-full items-start">
+        <DragDropContext
+          onDragEnd={result => onDragEnd(result, tasks, updateTasks)}
+        >
           {Array.from({ length: 5 }).map((_, idx) =>
             renderDayDroppable(addDays(dateOnFocus, idx - 2))
           )}
