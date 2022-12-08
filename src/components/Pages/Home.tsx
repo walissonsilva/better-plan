@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { format, addDays, isToday } from 'date-fns'
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 import { Droppable } from '../DragNDrop/Droppable'
 
 export const HomePage: React.FC = () => {
@@ -13,9 +14,13 @@ export const HomePage: React.FC = () => {
 
   return (
     <main className="p-4 lg:p-8">
-      <div className="flex items-center justify-between py-4">
-        <button onClick={() => addDayToDateOnFocus(-1)}>Previous</button>
-        <button onClick={() => addDayToDateOnFocus(1)}>Next</button>
+      <div className="flex items-center justify-between py-4 mb-4">
+        <button onClick={() => addDayToDateOnFocus(-1)}>
+          <MdArrowBackIos />
+        </button>
+        <button onClick={() => addDayToDateOnFocus(1)}>
+          <MdArrowForwardIos />
+        </button>
       </div>
       <section className="flex gap-1 w-full items-end">
         <DragDropContext onDragEnd={() => {}}>
