@@ -14,7 +14,7 @@ export default function Document() {
         />
       </Head>
 
-      <body className="bg-app-background font-default">
+      <body className="bg-gray-100 font-default">
         <Main />
         <NextScript />
       </body>

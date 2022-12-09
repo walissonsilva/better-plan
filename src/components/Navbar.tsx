@@ -3,7 +3,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md'
 
 export function Navbar() {
   return (
-    <header className="bg-indigo-700 w-screen h-20">
+    <header className="bg-sky-900 w-screen h-20">
       <nav className="flex items-center justify-between h-full text-white px-4 lg:px-8">
         <Link href="/">
           <span className="text-4xl font-semibold font-brand">Better Plan</span>

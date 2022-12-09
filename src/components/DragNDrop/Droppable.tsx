@@ -1,7 +1,13 @@
 import { format } from 'date-fns'
 import { Draggable, Droppable as DroppableDND } from 'react-beautiful-dnd'
 import { ITask } from '../../types/ITask'
-import { FiPlus, FiTrash, FiTrash2 } from 'react-icons/fi'
+import {
+  FiCheck,
+  FiCheckCircle,
+  FiPlus,
+  FiTrash,
+  FiTrash2
+} from 'react-icons/fi'
 import { useTasks } from '../../hooks/useTasks'
 
 const getItemStyle = (isDragging: any, draggableStyle: any) => ({
@@ -25,7 +31,7 @@ export function Droppable({
   date,
   isToday
 }: DroppableProps) {
-  const { addTask, removeTask } = useTasks()
+  const { addTask, removeTask, updateTaskStatus } = useTasks()
 
   function handleAddNewTask() {
     const title = prompt('Qual é o nome da tarefa?')
@@ -44,9 +50,9 @@ export function Droppable({
       <div
         className={`${
           isToday
-            ? 'bg-indigo-700 text-white border-[1px] border-indigo-700'
-            : 'border-[1px] border-gray-500 bg-gray-300 text-black'
-        }  px-8 py-3 rounded-t-lg flex justify-between items-center`}
+            ? 'bg-sky-900 text-white border-[1px] border-sky-900'
+            : 'border-[1px] border-gray-300 bg-white text-black'
+        }  px-8 py-3 rounded-md flex justify-between items-center`}
       >
         <div>
           <h2 className="text-xl font-semibold mb-2">{dayOfWeek}</h2>
@@ -59,11 +65,11 @@ export function Droppable({
 
         <button
           className={`rounded-full p-2 ${
-            isToday ? 'bg-indigo-400' : 'bg-gray-200'
-          } hover:brightness-125 transition-all`}
+            isToday ? 'bg-sky-700 text-white' : 'bg-sky-100'
+          } hover:brightness-90 transition-all`}
           onClick={handleAddNewTask}
         >
-          <FiPlus color="black" />
+          <FiPlus />
         </button>
       </div>
 
@@ -73,7 +79,7 @@ export function Droppable({
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={getListStyle(snapshot.isDraggingOver)}
-            className="flex flex-col gap-1 min-h-[200px] mt-1"
+            className="flex flex-col gap-1 min-h-[200px] pt-1 bg-gray-100"
           >
             {items.map((item, index) => (
               <Draggable
@@ -90,15 +96,29 @@ export function Droppable({
                       snapshot.isDragging,
                       provided.draggableProps.style
                     )}
-                    className=" border-gray-300 border-[1px] rounded-md px-2 py-2 flex items-center justify-between"
+                    className=" border-gray-300 bg-white border-[1px] rounded-md px-2 py-2 flex items-center justify-between"
                   >
-                    <span className="text-base flex-1">{`${item.title}`}</span>
-                    <button
-                      className="pl-2 cursor-pointer hover:text-red-600 transition-colors"
-                      onClick={() => handleRemoveTask(item.id)}
-                    >
-                      <FiTrash2 />
-                    </button>
+                    <span
+                      className={`text-base flex-1 ${
+                        item.isDone && 'line-through'
+                      }`}
+                    >{`${item.title}`}</span>
+
+                    <div>
+                      <button
+                        className="px-1 cursor-pointer text-green-600 transition-colors"
+                        onClick={() => updateTaskStatus(date, item.id)}
+                      >
+                        <FiCheckCircle />
+                      </button>
+
+                      <button
+                        className="px-1 cursor-pointer text-red-600 transition-colors"
+                        onClick={() => handleRemoveTask(item.id)}
+                      >
+                        <FiTrash2 />
+                      </button>
+                    </div>
                   </div>
                 )}
               </Draggable>
