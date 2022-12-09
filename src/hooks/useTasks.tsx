@@ -12,6 +12,7 @@ interface TasksContextData {
   updateTasks(tasks: ITasks): void
   removeTask(date: Date, taskId: number): void
   updateTaskStatus(date: Date, taskId: number): void
+  loadTasks(): void
 }
 
 const TasksContext = createContext({} as TasksContextData)
@@ -23,10 +24,17 @@ interface TasksProviderProps {
 export function TasksProvider({ children }: TasksProviderProps) {
   const [tasks, setTasks] = useState({} as ITasks)
 
+  function loadTasks() {
+    const tasksOnStorage = localStorage.getItem('@better-plan/tasks')
+    if (tasksOnStorage) {
+      setTasks(JSON.parse(tasksOnStorage))
+    }
+  }
+
   function addTask(title: string, date: Date) {
     const stringDate = getISODate(date)
 
-    setTasks({
+    const newTasks = {
       ...tasks,
       [stringDate]: [
         ...(tasks[stringDate] ?? []),
@@ -37,35 +45,52 @@ export function TasksProvider({ children }: TasksProviderProps) {
           isDone: false
         }
       ]
-    })
+    }
+
+    setTasks(newTasks)
+    localStorage.setItem('@better-plan/tasks', JSON.stringify(newTasks))
   }
 
   function updateTasks(tasks: ITasks) {
     setTasks(tasks)
+    localStorage.setItem('@better-plan/tasks', JSON.stringify(tasks))
   }
 
   function removeTask(date: Date, taskId: number) {
-    setTasks({
+    const newTasks = {
       ...tasks,
       [getISODate(date)]: tasks[getISODate(date)].filter(
         task => task.id !== taskId
       )
-    })
+    }
+    setTasks(newTasks)
+
+    localStorage.setItem('@better-plan/tasks', JSON.stringify(newTasks))
   }
 
   function updateTaskStatus(date: Date, taskId: number) {
-    setTasks({
+    const newTasks = {
       ...tasks,
       [getISODate(date)]: tasks[getISODate(date)].map(task => ({
         ...task,
         isDone: task.id === taskId ? !task.isDone : task.isDone
       }))
-    })
+    }
+    setTasks(newTasks)
+
+    localStorage.setItem('@better-plan/tasks', JSON.stringify(newTasks))
   }
 
   return (
     <TasksContext.Provider
-      value={{ tasks, addTask, updateTasks, removeTask, updateTaskStatus }}
+      value={{
+        tasks,
+        addTask,
+        updateTasks,
+        removeTask,
+        updateTaskStatus,
+        loadTasks
+      }}
     >
       {children}
     </TasksContext.Provider>

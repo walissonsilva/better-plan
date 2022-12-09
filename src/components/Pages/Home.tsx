@@ -1,5 +1,5 @@
 import { addDays, format, isToday } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 import { useTasks } from '../../hooks/useTasks'
@@ -10,7 +10,7 @@ import { Droppable } from '../DragNDrop/Droppable'
 export const HomePage: React.FC = () => {
   const today = new Date()
   const [dateOnFocus, setDateOnFocus] = useState(today)
-  const { tasks, updateTasks } = useTasks()
+  const { tasks, updateTasks, loadTasks } = useTasks()
 
   function addDayToDateOnFocus(addition: 1 | -1) {
     setDateOnFocus(addDays(dateOnFocus, addition))
@@ -28,6 +28,10 @@ export const HomePage: React.FC = () => {
       />
     )
   }
+
+  useEffect(() => {
+    loadTasks()
+  }, [])
 
   return (
     <main className="p-4 lg:p-8">
