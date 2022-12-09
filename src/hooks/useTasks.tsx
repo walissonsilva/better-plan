@@ -10,6 +10,7 @@ interface TasksContextData {
   tasks: ITasks
   addTask(title: string, date: Date): void
   updateTasks(tasks: ITasks): void
+  removeTask(date: Date, taskId: number): void
 }
 
 const TasksContext = createContext({} as TasksContextData)
@@ -42,8 +43,17 @@ export function TasksProvider({ children }: TasksProviderProps) {
     setTasks(tasks)
   }
 
+  function removeTask(date: Date, taskId: number) {
+    setTasks({
+      ...tasks,
+      [getISODate(date)]: tasks[getISODate(date)].filter(
+        task => task.id !== taskId
+      )
+    })
+  }
+
   return (
-    <TasksContext.Provider value={{ tasks, addTask, updateTasks }}>
+    <TasksContext.Provider value={{ tasks, addTask, updateTasks, removeTask }}>
       {children}
     </TasksContext.Provider>
   )

@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 import { Draggable, Droppable as DroppableDND } from 'react-beautiful-dnd'
 import { ITask } from '../../types/ITask'
-import { FiPlus } from 'react-icons/fi'
+import { FiPlus, FiTrash, FiTrash2 } from 'react-icons/fi'
 import { useTasks } from '../../hooks/useTasks'
 
 const getItemStyle = (isDragging: any, draggableStyle: any) => ({
@@ -25,11 +25,18 @@ export function Droppable({
   date,
   isToday
 }: DroppableProps) {
-  const { addTask } = useTasks()
+  const { addTask, removeTask } = useTasks()
 
   function handleAddNewTask() {
-    const title = prompt('Qual é o nome da tarefa?') || ''
-    addTask(title, date)
+    const title = prompt('Qual é o nome da tarefa?')
+
+    if (title) addTask(title, date)
+  }
+
+  function handleRemoveTask(taskId: number) {
+    const confirmation = confirm('Tem certeza que deseja remover a tarefa?')
+
+    if (confirmation) removeTask(date, taskId)
   }
 
   return (
@@ -66,7 +73,7 @@ export function Droppable({
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={getListStyle(snapshot.isDraggingOver)}
-            className="flex flex-col gap-1"
+            className="flex flex-col gap-1 min-h-[200px] mt-1"
           >
             {items.map((item, index) => (
               <Draggable
@@ -83,10 +90,15 @@ export function Droppable({
                       snapshot.isDragging,
                       provided.draggableProps.style
                     )}
-                    className=" border-b-gray-300 border-b-[1px] px-1 py-2"
-                    onClick={() => alert('Opa')}
+                    className=" border-gray-300 border-[1px] rounded-md px-2 py-2 flex items-center justify-between"
                   >
-                    <span className="text-base">{`${item.title}`}</span>
+                    <span className="text-base flex-1">{`${item.title}`}</span>
+                    <button
+                      className="pl-2 cursor-pointer hover:text-red-600 transition-colors"
+                      onClick={() => handleRemoveTask(item.id)}
+                    >
+                      <FiTrash2 />
+                    </button>
                   </div>
                 )}
               </Draggable>
