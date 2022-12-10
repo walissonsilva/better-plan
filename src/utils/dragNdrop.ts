@@ -1,4 +1,4 @@
-import { DropResult } from 'react-beautiful-dnd'
+import { DraggableLocation, DropResult } from 'react-beautiful-dnd'
 import { ITasks } from '../hooks/useTasks'
 
 function reorder(
@@ -14,6 +14,26 @@ function reorder(
   return {
     ...tasks,
     [droppableId]: result
+  }
+}
+
+const move = (
+  tasks: ITasks,
+  sourceId: string,
+  destinationId: string,
+  droppableSource: DraggableLocation,
+  droppableDestination: DraggableLocation
+) => {
+  const sourceClone = tasks[sourceId] ?? []
+  const destClone = tasks[destinationId] ?? []
+  const [removed] = sourceClone.splice(droppableSource.index, 1)
+
+  destClone.splice(droppableDestination.index, 0, removed)
+
+  return {
+    ...tasks,
+    [sourceId]: sourceClone,
+    [destinationId]: destClone
   }
 }
 
@@ -39,21 +59,14 @@ export function onDragEnd(
     updateTasks(tasksReordered)
   } else {
     console.log('move')
-    // const result = move(
-    //   getList(source.droppableId),
-    //   getList(destination.droppableId),
-    //   source,
-    //   destination
-    // );
+    const result = move(
+      tasks,
+      source.droppableId,
+      destination.droppableId,
+      source,
+      destination
+    )
 
-    // const itemsUpdated = Object.keys(items).reduce(
-    //   (itemsUpdated, droppableId: string) => ({
-    //     ...itemsUpdated,
-    //     [droppableId]: result[droppableId] ?? items[droppableId],
-    //   }),
-    //   {}
-    // ) as IItem;
-
-    // setItems(itemsUpdated);
+    updateTasks(result)
   }
 }

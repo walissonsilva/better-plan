@@ -79,7 +79,7 @@ export function Droppable({
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={getListStyle(snapshot.isDraggingOver)}
-            className="flex flex-col gap-1 min-h-[200px] pt-1 bg-gray-100"
+            className="flex flex-col gap-1 min-h-[500px] pt-1 bg-gray-100"
           >
             {items.map((item, index) => (
               <Draggable
