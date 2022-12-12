@@ -3,13 +3,14 @@ import { useEffect, useState } from 'react'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md'
 import { useTasks } from '../../hooks/useTasks'
-import { getISODate } from '../../utils/dates'
+import { getHighlightedDateOfWeek, getISODate } from '../../utils/dates'
 import { onDragEnd } from '../../utils/dragNdrop'
 import { Droppable } from '../DragNDrop/Droppable'
 
 export const HomePage: React.FC = () => {
-  const today = new Date()
-  const [dateOnFocus, setDateOnFocus] = useState(today)
+  const [dateOnFocus, setDateOnFocus] = useState(() =>
+    getHighlightedDateOfWeek()
+  )
   const { tasks, updateTasks, loadTasks } = useTasks()
 
   function addDayToDateOnFocus(addition: 1 | -1) {
@@ -35,12 +36,13 @@ export const HomePage: React.FC = () => {
 
   return (
     <main className="p-4 lg:p-8">
-      <div className="flex items-center justify-between py-4 mb-4">
+      <div className="flex items-center justify-between py-4 mb-4 px-2">
         <button onClick={() => addDayToDateOnFocus(-1)}>
-          <MdArrowBackIos size={20} />
+          <MdArrowBackIos />
         </button>
+        <p className="font-semibold uppercase text-lg">Esta semana</p>
         <button onClick={() => addDayToDateOnFocus(1)}>
-          <MdArrowForwardIos size={20} />
+          <MdArrowForwardIos />
         </button>
       </div>
       <section className="flex gap-1 w-full items-start">

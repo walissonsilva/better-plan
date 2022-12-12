@@ -12,7 +12,7 @@ export function Navbar() {
 
         <ul className="list-none flex gap-4">
           <li className="flex gap-2 items-center">
-            Olá, Walisson Silva!
+            Bem-vindo(a) ao Better Plan!
             <MdKeyboardArrowDown />
           </li>
         </ul>
