@@ -99,7 +99,7 @@ export function Droppable({
                     className=" border-gray-300 bg-white border-[1px] rounded-md px-2 py-2 flex items-center justify-between"
                   >
                     <span
-                      className={`text-base flex-1 ${
+                      className={`text-base pl-1 flex-1 ${
                         item.isDone && 'line-through'
                       }`}
                     >{`${item.title}`}</span>
