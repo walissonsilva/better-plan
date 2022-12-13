@@ -3,10 +3,8 @@ import {
   formatISO,
   isFriday,
   isSaturday,
-  isSunday,
   isThursday,
   isWednesday,
-  nextTuesday,
   nextWednesday,
   previousWednesday
 } from 'date-fns'
@@ -32,5 +30,5 @@ export function getHighlightedDateOfWeek() {
     return previousWednesday(today)
   }
 
-  return nextTuesday(today)
+  return nextWednesday(today)
 }
